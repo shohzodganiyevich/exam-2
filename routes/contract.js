@@ -1,26 +1,26 @@
 const express = require("express");
-const { Brand, brandValidation } = require("./../models/brand");
+const {Contract, contractValidation  } = require('./../models/contract');
 
-const brandRoute = express.Router();
+const contractRoute = express.Router();
 
-brandRoute.get("/", async (req, res) => {
+contractRoute.get("/", async (req, res) => {
   let { take = 10, page = 1 } = req.query;
   let skip = (page - 1) * take;
   try {
-    let data = await Brand.find().skip(skip).limit(take);
+    let data = await Contract.find().skip(skip).limit(take);
     res.json(data);
   } catch (e) {
     res.status(404).json({ message: e });
   }
 });
 
-brandRoute.post("/", async (req, res) => {
-  let { value, error } = brandValidation.validate(req.body);
+contractRoute.post("/", async (req, res) => {
+  let { value, error } = contractValidation.validate(req.body);
   try {
     if (error) {
       return res.status(401).json({ message: error.details[0].message });
     }
-    let newData = new Brand(value);
+    let newData = new Contract(value);
     await newData.save();
     res.json(newData);
   } catch (e) {
@@ -28,24 +28,24 @@ brandRoute.post("/", async (req, res) => {
   }
 });
 
-brandRoute.patch("/:id", async (req, res) => {
+contractRoute.patch("/:id", async (req, res) => {
   try {
     let { id } = req.params;
     let changes = req.body;
-    let changed = await Brand.findByIdAndUpdate(id, changes, { new: true });
+    let changed = await Contract.findByIdAndUpdate(id, changes, { new: true });
     res.json(changed);
   } catch (e) {
     res.status(404).json({ message: e });
   }
 });
 
-brandRoute.delete("/:id", async (req, res) => {
+contractRoute.delete("/:id", async (req, res) => {
   try {
     let id = req.params.id;
-    let deleted = await Brand.findByIdAndDelete(id);
+    let deleted = await Contract.findByIdAndDelete(id);
     res.json(deleted);
   } catch (e) {
     res.status(404).json({ message: e });
   }
 });
-module.exports = brandRoute;
+module.exports = contractRoute;
