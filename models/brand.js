@@ -13,7 +13,7 @@ const Brand = mongoose.model("brand", BrandSchema);
 
 const brandValidation = joi.object({
   brand_name: joi.string().required(),
-  category_id: joi.string().required(),
+  // category_id: joi.string().required(),
 });
 
 module.exports = { Brand, brandValidation };

@@ -14,9 +14,15 @@ customerRoute.get("/", async (req, res) => {
   }
 });
 
-customerRoute.post("/", async (req, res) => {
+customerRoute.post("/register", async (req, res) => {
   let { value, error } = customerValidation.validate(req.body);
+  let customerone = await Customer.findOne({
+    phone_number: value.phone_number,
+  });
   try {
+    if(customerone){
+      return res.status(401).json({ message: "this phone already exists" });
+    }
     if (error) {
       return res.status(401).json({ message: error.details[0].message });
     }

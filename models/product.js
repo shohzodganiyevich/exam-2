@@ -9,6 +9,10 @@ const ProductSchema = new mongoose.Schema({
   },
   product_price: Number,
   remainder: Number,
+  sell_day:{
+    type:mongoose.Types.ObjectId,
+    ref:"contract"
+  }
 });
 
 const Product = mongoose.model("product", ProductSchema);

@@ -3,6 +3,7 @@ const { Product, productValidation } = require("./../models/product");
 const multer = require("multer");
 const path = require("path");
 const productRoute = express.Router();
+const { Contract, contractValidation } = require("./../models/contract");
 
 const store = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -68,6 +69,20 @@ productRoute.get("/:id", async (req, res) => {
     let id = req.params.id;
     let aData = await Product.findById(id);
     res.json(aData);
+  } catch (e) {
+    res.status(404).json({ message: e });
+  }
+});
+
+productRoute.get("/", async (req, res) => {
+  let { starttime, endtime } = req.body;
+  try {
+    let start = new Date(starttime);
+    let end = new Date(endtime);
+    let periodcontacts = await Contract.find({
+      contract_date: { $gte: start, $lte: end },
+    });
+    res.json(periodcontacts);
   } catch (e) {
     res.status(404).json({ message: e });
   }

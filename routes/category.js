@@ -1,5 +1,5 @@
 const express = require("express");
-const { Category, categoryValidation } = require('./../models/category');
+const { Category, categoryValidation } = require("./../models/category");
 
 const categoryRoute = express.Router();
 
@@ -17,6 +17,12 @@ categoryRoute.get("/", async (req, res) => {
 categoryRoute.post("/", async (req, res) => {
   let { value, error } = categoryValidation.validate(req.body);
   try {
+    let dataone = await Category.findOne({
+      category_name: value.category_name,
+    });
+    if (dataone) {
+      return res.json({ message: "bunday kat bor" });
+    }
     if (error) {
       return res.status(401).json({ message: error.details[0].message });
     }
